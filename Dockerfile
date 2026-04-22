@@ -7,8 +7,9 @@ RUN dotnet restore "src/OrderManagementSystem.Api/OrderManagementSystem.Api.cspr
 
 # Copy the rest of the sources and publish
 COPY . .
-WORKDIR /src/src/OrderManagementSystem.Api
-RUN dotnet publish "OrderManagementSystem.Api.csproj" -c Release -o /app/publish --no-restore
+# Publish explicitly referencing the project file path to avoid working-directory issues
+WORKDIR /src
+RUN dotnet publish "src/OrderManagementSystem.Api/OrderManagementSystem.Api.csproj" -c Release -o /app/publish --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
