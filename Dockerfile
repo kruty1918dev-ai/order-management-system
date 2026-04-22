@@ -1,14 +1,14 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-# Копіюємо тільки csproj спочатку для швидшого кешування шарів
+# Copy only the project file first to leverage Docker layer caching
 COPY ["src/OrderManagementSystem.Api/OrderManagementSystem.Api.csproj", "src/OrderManagementSystem.Api/"]
 RUN dotnet restore "src/OrderManagementSystem.Api/OrderManagementSystem.Api.csproj"
 
-# Копіюємо решту коду і публікуємо
+# Copy the rest of the sources and publish
 COPY . .
-WORKDIR /src/OrderManagementSystem.Api
-RUN dotnet publish -c Release -o /app/publish --no-restore
+WORKDIR /src/src/OrderManagementSystem.Api
+RUN dotnet publish "OrderManagementSystem.Api.csproj" -c Release -o /app/publish --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
