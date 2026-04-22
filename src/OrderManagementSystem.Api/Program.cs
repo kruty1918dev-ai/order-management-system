@@ -19,7 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();   
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -37,6 +37,7 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 app.MapGet("/", () => "Order Management System API is running.");
+app.MapGet("/health", () => Results.Ok(new {status = "ok", timestamp = DateTime.UtcNow}));
 
 app.Run();
 
